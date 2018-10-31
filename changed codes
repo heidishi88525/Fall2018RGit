@@ -1,0 +1,18 @@
+# Install some packages and load them
+install.packages("rio")
+install.packages("here")
+library(vowels)
+library(here)
+library(rio)
+# Read in NK & NNK data/import data set
+nk <- import(here("data", "nk1.xlsx"))
+nnk <- import(here("data", "nnk1.xlsx"))
+# Putting both datasets together into one (I realized we have to do this to normalize... we can separate the groups back out later...)
+head(nk)
+head(nnk)
+dim(nk)
+dim(nnk)
+vowels <- rbind(nk, nnk)
+# Vowels is now both sets of data
+dim(vowels)
+
