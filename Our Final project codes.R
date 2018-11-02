@@ -16,6 +16,9 @@ nnk <- import(here("data", "NNK.xls"))
 # Putting both datasets together into one (I realized we have to do this to normalize... we can separate the groups back out later...)
 head(nk)
 head(nnk)
+View(nk)
+View(nnk)
+
 dim(nk)
 dim(nnk)
 vowels <- rbind(nk, nnk)
@@ -25,12 +28,8 @@ dim(vowels)
 
 # Normalize all vowels (Lobanov method), and put those values into a new dataframe called l.vowels
 l.vowels <- norm.lobanov(vowels)
+View(l.vowels)
 
-# Vowels is now both sets of data
-dim(vowels)
-
-# Normalize all vowels (Lobanov method), and put those values into a new dataframe called l.vowels
-l.vowels <- norm.lobanov(vowels)
 
 # Note that this changes the headings
 head(l.vowels)
