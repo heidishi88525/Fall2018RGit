@@ -10,12 +10,113 @@ library(languageR)
 
 
 #### [READ ME] ####
-##This project aims to compare Korean native and non native vowel productions. In Section 1, we will first use some linguistic R packages/functions to obtain our results for research purposes. Afterwards, in Section 2, we will employ the required functions in the EDLD 610 final rubic. 
+##This project aims to compare Korean native and non native vowel productions. In Section 1, we will first employ the required functions in the EDLD 610 final rubic. Afterwards, in Section 2, we will use some linguistic R packages/functions to obtain our results for research purposes.
 
 ####[Note]####
 ##F1 (vowel height) and F2(vowel backness) are formant measurements in phonetics which indicate the vowel articulation status in a speaker's vocal cavity. They are phonetic terminologies and DIFFERENT variables, rather than the same variable labled by different numbers. 
 
-####Section 1. (The following functions are for real research purposes) ####
+####Section 1. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).####
+
+#l.vowels is the main dataframe we will work on, we rename it into df
+library(tidyverse)
+View(l.vowels)
+df<-l.vowels
+View(df)
+
+# cleaning up df, removed NA & useless columns, call the new one td
+td<- df[-3:-7]
+View(td)
+
+####gather####
+gtd<-td %>% 
+  gather(Forments,Value,-c(1:2,5))
+View(gtd)   #works
+
+####separate####
+gtd %>% 
+  separate(Speaker, c("nativity", "number"), -1)
+
+####spread####
+gtd %>% 
+  tbl_df() %>% 
+  group_by(Vowel, Forments) %>% 
+  summarize(mean = mean(Value, na.rm = TRUE)) %>% 
+  spread(Vowel, mean)
+
+####select+ group_by+ summarize####
+#check mean vowel height (F1) by each Vowel
+F1vmean<-td %>% 
+  select(Speaker,Vowel,F1) %>% 
+  group_by(Vowel) %>% 
+  summarize(vmeanF1=mean(F1))
+F1vmean
+
+#Plot mean F1 of each vowel
+ggplot(F1vmean, aes(x=Vowel,y = vmeanF1))+
+  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("Mean F1 of Each Vowel") +
+  theme_bw()
+
+#check mean vowel backenss (F2) by each Vowel
+F2vmean<-td %>% 
+  select(Speaker,Vowel,F2) %>% 
+  group_by(Vowel) %>% 
+  summarize(vmeanF2=mean(F2))
+F2vmean
+
+#Plot mean F2 of each vowel
+ggplot(F2vmean, aes(x=Vowel,y = vmeanF2))+
+  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+  xlab("Vowel") + ylab("F2") +
+  ggtitle("Mean F2 of Each Vowel") +
+  theme_bw()
+
+####filter+ group_by+ summarize####
+#native F1 mean and sd of each vowel
+F1n<-td %>%
+  filter (Country=="Native Korean") %>% 
+  group_by(Vowel) %>% 
+  summarize(nmean_F1 = mean(F1),
+            nsd_F1 = sd(F1))
+
+F1n #native's mean F1 & sd of vowel i
+
+#plot of native speakers' F1
+td %>% 
+  filter (Country=="Native Korean") %>% 
+  group_by(Vowel) %>% 
+  ggplot(aes(x = Vowel, y = F1)) +
+  geom_line(aes(group = Vowel)) +
+  geom_point()+
+  geom_boxplot()+
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("F1 of Native Speakers") +
+  theme_bw()
+
+#non-native F1 mean and sd of each vowel
+F1nn<-td %>%
+  filter (Country=="Non native Korean") %>% 
+  group_by(Vowel) %>% 
+  summarize(nnmean_F1 = mean(F1),
+            nnsd_F1 = sd(F1))
+
+F1nn #native's mean F1 & sd of vowel i
+
+#plot of non-native speakers' F1
+td %>% 
+  filter (Country=="Non native Korean") %>% 
+  group_by(Vowel) %>% 
+  ggplot(aes(x = Vowel, y = F1)) +
+  geom_line(aes(group = Vowel)) +
+  geom_point()+
+  geom_boxplot()+
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("F1 of Non-Native Speakers") +
+  theme_bw()
+
+
+####Section 2. (The following functions are for real research purposes) ####
 
 # Read in NK（Native-Korean) & NNK（non-Native-Korean) data/import data set
 nk <- import(here("data", "NK.xls"))
@@ -41,7 +142,7 @@ dim(l.vowels)
 View(l.vowels)
 
 ####Formatting####
-#The following codes are based on a format to create Vowel charts, they may seem redundant, but... sorry
+#The following codes are based on a template to create Vowel charts, they may seem redundant, but... sorry
 
 # The asterisks in the headings are weird -- rename the F*1 & F*2 columns
 l.vowels$F1 <- l.vowels[,4]
@@ -122,107 +223,5 @@ add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", spe
 # Plotting mean values for both countries on one plot
 vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-3), title="Both groups of speakers", size=1.75)
 add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
-
-
-####Section 2. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).####
-
-#l.vowels is the main dataframe we will work on, we rename it into df
-library(tidyverse)
-View(l.vowels)
-df<-l.vowels
-View(df)
-
-# cleaning up df, removed NA & useless columns, call the new one td
-td<- df[-3:-7]
-View(td)
-
-####gather####
-gtd<-td %>% 
-  gather(Forments,Value,-c(1:2,5))
-View(gtd)   #works
-
-####spread####
-gtd %>%  #dont know how to do 
-
-####seperate####
-td %>%
-  gather(Forments,Value,-c(1:2,5)) %>%
-  separate(Forments,
-           c("F1", "F2"),
-           sep = "_",
-           convert = TRUE)  ## doesnt work ???
-
-
-####select+ group_by+ summarize####
-#check mean vowel height (F1) by each Vowel
-F1vmean<-td %>% 
- select(Speaker,Vowel,F1) %>% 
-  group_by(Vowel) %>% 
-  summarize(vmeanF1=mean(F1))
-F1vmean
-
-#Plot mean F1 of each vowel
-ggplot(F1vmean, aes(x=Vowel,y = vmeanF1))+
-  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
-  xlab("Vowel") + ylab("F1") +
-  ggtitle("Mean F1 of Each Vowel") +
-  theme_bw()
-
-#check mean vowel backenss (F2) by each Vowel
-F2vmean<-td %>% 
-  select(Speaker,Vowel,F2) %>% 
-  group_by(Vowel) %>% 
-  summarize(vmeanF2=mean(F2))
-F2vmean
-
-ggplot(F2vmean, aes(x=Vowel,y = vmeanF2))+
-  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
-  xlab("Vowel") + ylab("F2") +
-  ggtitle("Mean F2 of Each Vowel") +
-  theme_bw()
-
-####filter+ group_by+ summarize####
-#native F1 mean and sd of each vowel
-F1n<-td %>%
-  filter (Country=="Native Korean") %>% 
-  group_by(Vowel) %>% 
-  summarize(nmean_F1 = mean(F1),
-            nsd_F1 = sd(F1))
-  
-F1n #native's mean F1 & sd of vowel i
-
-#plot of native speakers' F1
-td %>% 
-  filter (Country=="Native Korean") %>% 
-  group_by(Vowel) %>% 
-  ggplot(aes(x = Vowel, y = F1)) +
-  geom_line(aes(group = Vowel)) +
-  geom_point()+
-  geom_boxplot()+
-  xlab("Vowel") + ylab("F1") +
-  ggtitle("F1 of Native Speakers") +
-  theme_bw()
-
-#non-native F1 mean and sd of each vowel
-F1nn<-td %>%
-  filter (Country=="Non native Korean") %>% 
-  group_by(Vowel) %>% 
-  summarize(nnmean_F1 = mean(F1),
-            nnsd_F1 = sd(F1))
-
-F1nn #native's mean F1 & sd of vowel i
-
-#plot of non-native speakers' F1
-td %>% 
-  filter (Country=="Non native Korean") %>% 
-  group_by(Vowel) %>% 
-  ggplot(aes(x = Vowel, y = F1)) +
-  geom_line(aes(group = Vowel)) +
-  geom_point()+
-  geom_boxplot()+
-  xlab("Vowel") + ylab("F1") +
-  ggtitle("F1 of Non-Native Speakers") +
-  theme_bw()
-
 
 
