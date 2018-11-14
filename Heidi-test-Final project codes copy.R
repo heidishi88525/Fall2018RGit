@@ -9,13 +9,13 @@ library(rio)
 library(languageR)
 
 
-### [READ ME] ###
+#### [READ ME] ####
 ##This project aims to compare Korean native and non native vowel productions. In Section 1, we will first use some linguistic R packages/functions to obtain our results for research purposes. Afterwards, in Section 2, we will employ the required functions in the EDLD 610 final rubic. 
 
-###[Note]###
+####[Note]####
 ##F1 (vowel height) and F2(vowel backness) are formant measurements in phonetics which indicate the vowel articulation status in a speaker's vocal cavity. They are phonetic terminologies and DIFFERENT variables, rather than the same variable labled by different numbers. 
 
-##Section 1. (The following functions are for real research purposes) ##
+####Section 1. (The following functions are for real research purposes) ####
 
 # Read in NK（Native-Korean) & NNK（non-Native-Korean) data/import data set
 nk <- import(here("data", "NK.xls"))
@@ -31,24 +31,25 @@ dim(nnk) #72 rows (speech samples) of 3 non-native speakers' 3 repetitions of 8v
 # Vowels contains both sets of data now.
 vowels <- rbind(nk, nnk)
 View(vowels)
-dim(vowels) 
+dim(vowels)  #144 rows in total
 
 # Normalize all vowels (Lobanov method), and put those values into a new dataframe called l.vowels
 l.vowels <- norm.lobanov(vowels)
 dim(l.vowels)
 
 # Note that this changes the headings
-head(l.vowels)
 View(l.vowels)
+
+####Formatting####
+#The following codes are based on a format to create Vowel charts, they may seem redundant, but... sorry
 
 # The asterisks in the headings are weird -- rename the F*1 & F*2 columns
 l.vowels$F1 <- l.vowels[,4]
 l.vowels$F2 <- l.vowels[,5]
 
-# Make Speaker and Vowel into factors
+# Change Speaker and Vowel into factors
 l.vowels$Speaker <- as.factor(l.vowels$Speaker)
 l.vowels$Vowel <- as.factor(l.vowels$Vowel)
-
 
 # How many speakers do we have?
 levels(l.vowels$Speaker)  #the answer is 6, NS=3, NNS=3
@@ -79,15 +80,17 @@ summary.c.vowels <- ddply(l.vowels, .(Country, Vowel), summarise, N = length(F1)
 
 View(summary.c.vowels)
 
-###Plots
+####Vowel Charts####
 
 # Plotting everything at once to look at outliers
 vowelplot(l.vowels, color="vowels", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, size=.75)
 
 # Lots of outliers, so should probably trim
 
+####Formatting#####
 # In order to plot by group, need to convince the program that "country" is really "speaker"
 # Make lg.vowels, and put "group2" in the "Speaker" (first) column
+
 lc.vowels <- l.vowels
 lc.vowels$SpeakerNum <- lc.vowels[,1] #adding a speakerNum column at the end
 lc.vowels[,1] <- lc.vowels$Country #changing the "Speaker" column to "Country"
@@ -121,13 +124,15 @@ vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-
 add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
 
 
-##Section 2. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).
+####Section 2. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).####
+
+#l.vowels is the main dataframe we will work on, we rename it into df
 library(tidyverse)
 View(l.vowels)
 df<-l.vowels
 View(df)
 
-# cleaning up df, removed NA & useless columns
+# cleaning up df, removed NA & useless columns, call the new one td
 td<- df[-3:-7]
 View(td)
 
@@ -156,6 +161,7 @@ F1vmean<-td %>%
   summarize(vmeanF1=mean(F1))
 F1vmean
 
+#Plot mean F1 of each vowel
 ggplot(F1vmean, aes(x=Vowel,y = vmeanF1))+
   geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
   xlab("Vowel") + ylab("F1") +
@@ -206,7 +212,7 @@ F1nn<-td %>%
 
 F1nn #native's mean F1 & sd of vowel i
 
-#plot of native speakers' F1
+#plot of non-native speakers' F1
 td %>% 
   filter (Country=="Non native Korean") %>% 
   group_by(Vowel) %>% 
