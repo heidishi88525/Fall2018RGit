@@ -1,7 +1,4 @@
-install.packages("rio")
-install.packages("here")
-install.packages("vowels")
-install.packages("languageR")
+###CAM: I removed the code that installs the packages. Although it is more reproducible, I believe there is a faux pas about installing packages onto other people's computers. 
 
 library(vowels)
 library(here)
