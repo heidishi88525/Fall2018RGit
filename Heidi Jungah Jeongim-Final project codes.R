@@ -4,6 +4,7 @@ library(vowels)
 library(here)
 library(rio)
 library(languageR)
+library(tidyverse)###CAM: I moved the loading of tidyverse up here so all of the packages are together. 
 
 
 #### [READ ME] ####
@@ -15,7 +16,6 @@ library(languageR)
 ####Section 1. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).####
 
 #l.vowels is the main dataframe we will work on, we rename it into df
-library(tidyverse)
 View(l.vowels)
 df <- l.vowels ###CAM: I added spaces around the assignment operator for legibility. I've also added spaces around assignment operators and equal signs in the rest of the document. It is just a stylistic thing. In some cases, there was a space between `filter` and the first paranthesis of the function. I removed those as well. Rstudio has a handy tool under `RStudio > Preferences > Code > Diagnostics > Provide R Style Diagnostics (e.g., Whitespace)`, which will atuomatically flag whitespace issues for you :)
 View(df)
