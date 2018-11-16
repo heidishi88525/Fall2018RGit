@@ -22,7 +22,7 @@ df <- l.vowels ###CAM: I added spaces around the assignment operator for legibil
 View(df)
 
 # cleaning up df, removed NA & useless columns, call the new one td
-td <- df[-3:-7] ###CAM: It might be good to use dplyr::select here
+td <- df[-3:-7] ###CAM: It might be good to use dplyr::select here. Instead of numerals, I would use the variable names for readability. So instead of -3, I would use the name for column 3. 
 View(td)
 
 ####gather####
