@@ -249,10 +249,10 @@ vowelplot(nk.means, color = "vowels", label = "vowels", xlim = c(3, -3), ylim = 
 add.spread.vowelplot(lc.vowels[,1:7], sd.mult = 1, ellipsis = T, color = "vowels", speaker = "Native Korean")
 
 vowelplot(nnk.means, color = "vowels", label = "vowels", xlim = c(3, -3), ylim = c(3, -3), title = "Non-native Korean speakers", leg = NA, size = 1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult = 1, ellipsis = T, color = "vowels", speaker = "Non native Korean")
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult = 1, ellipsis = T, color = "vowels", speaker = "Non native Korean") ###CAM: very cool!
 
 # Plotting mean values for both countries on one plot
 vowelplot(both.means, color = "speakers", label = "vowels", xlim = c(3,-3), ylim = c(3,-3), title = "Both groups of speakers", size = 1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult = 1, ellipsis = T, color = "speakers")
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult = 1, ellipsis = T, color = "speakers") ###CAM: Also, very cool!
 
 
