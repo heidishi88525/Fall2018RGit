@@ -158,8 +158,11 @@ names(l.vowels) <- gsub("\\*", "", names(l.vowels)) ###CAM: Here is an alternati
 
 
 # Change Speaker and Vowel into factors
-l.vowels$Speaker <- as.factor(l.vowels$Speaker)
-l.vowels$Vowel <- as.factor(l.vowels$Vowel)
+#l.vowels$Speaker <- as.factor(l.vowels$Speaker)
+#l.vowels$Vowel <- as.factor(l.vowels$Vowel)
+l.vowels <- l.vowels %>% 
+  mutate(Speaker = factor(Speaker),
+         Vowel = factor(Vowel)) ###CAM: Although the way you converted the variables to factors is not incorrect, I've included how you would do it using dplyr.
 
 # How many speakers do we have?
 levels(l.vowels$Speaker)  #the answer is 6, NS=3, NNS=3
