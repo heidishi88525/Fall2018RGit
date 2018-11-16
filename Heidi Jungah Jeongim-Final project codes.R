@@ -152,8 +152,10 @@ View(l.vowels)
 #The following codes are based on a template to create Vowel charts, they may seem redundant, but... sorry
 
 # The asterisks in the headings are weird -- rename the F*1 & F*2 columns
-l.vowels$F1 <- l.vowels[,4]
-l.vowels$F2 <- l.vowels[,5]
+#l.vowels$F1 <- l.vowels[,4]
+#l.vowels$F2 <- l.vowels[,5]
+names(l.vowels) <- gsub("\\*", "", names(l.vowels)) ###CAM: Here is an alternative way of removing the asterisks from the column names. The benefit is that you do not have to create new varaibles. Essentially, gsub takes all matches of a pattern (in this case "*") and replaces it with a string (in this case nothing). The "\\" before the asterisk is so that "*" is not interpreted as a special character.
+
 
 # Change Speaker and Vowel into factors
 l.vowels$Speaker <- as.factor(l.vowels$Speaker)
