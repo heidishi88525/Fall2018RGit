@@ -209,8 +209,9 @@ summary.c.vowels <- l.vowels %>%
 #          leg = NA, 
 #          size = .75)
 
-ggplot(l.vowels, aes(x = F2, y = F1, color = Vowel, pch = Vowel)) +
-  geom_point() ###CAM: Here is an alternative way to create the above plot using ggplot. Although, I could missing some important functions that vowelplot uses. 
+ggplot(l.vowels, aes(x = F2, y = F1, color = Vowel, shape = Vowel)) +
+  geom_point() +
+  scale_shape_manual(values = 1:nlevels(l.vowels$Vowel))###CAM: Here is an alternative way to create the above plot using ggplot. Although, I could missing some important functions that vowelplot uses. 
 
 # Lots of outliers, so should probably trim 
 
@@ -235,8 +236,7 @@ add.spread.vowelplot(lc.vowels[,1:7], speaker = "Native Korean", sd.mult = 1, el
 
 vowelplot(lc.vowels, color = "vowels", speaker = "Non native Korean", label = "vowels", xlim = c(4.5,-4.5), ylim = c(4.5,-4.5), leg = NA, title = "Non-native Korean speakers", size = .75)
 
-add.spread.vowelplot(lc.vowels[,1:7], speaker = "Non native Korean", sd.mult = 1, ellipsis = T, color = "vowels")
-
+add.spread.vowelplot(lc.vowels[,1:7], speaker = "Non native Korean", sd.mult = 1, ellipsis = T, color = "vowels") 
 
 # Plotting just the mean values, grouped by country
 
