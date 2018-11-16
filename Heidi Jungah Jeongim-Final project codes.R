@@ -124,7 +124,7 @@ nnk <- import(here("data", "NNK.xls"))
 
 # Putting both datasets together into one. To compare the vowel productions, we need to normalize the data, aiming to get rid of influential factors such as speaker body size, gender, etc. Vowel normalization is necessary because it makes the forments of different speaker comparable.  
 
-View(nk)
+View(nk) #CAM: I prefer not to use View in my scripts because it moves focus from the script you are working on to the data in a seperate tab. This can make it hard to quickly run through all of your code.
 View(nnk)
 dim(nk)  #72 rows (speech samples) of 3 native speakers' 3 repetitions of 8 vowels
 dim(nnk) #72 rows (speech samples) of 3 non-native speakers' 3 repetitions of 8vowels
