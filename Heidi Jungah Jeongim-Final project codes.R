@@ -16,18 +16,18 @@ library(tidyverse)###CAM: I moved the loading of tidyverse up here so all of the
 ####Section 1. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).####
 
 #l.vowels is the main dataframe we will work on, we rename it into df
-View(l.vowels) ###CAM: I can't seem to find where the l.vowels object is coming from. Are you importing NK.xls or NNK.xls? Is it a dataset that comes with the "vowels" package? If so, I cannot find it. 
+View(l.vowels) ###CAM: I couldn't seem to find where the l.vowels object was coming from. I would suggest moving the importing of l.vowels above this line so all of the code works from the start.
 
 df <- l.vowels ###CAM: I added spaces around the assignment operator for legibility. I've also added spaces around assignment operators and equal signs in the rest of the document. It is just a stylistic thing. In some cases, there was a space between `filter` and the first paranthesis of the function. I removed those as well. Rstudio has a handy tool under `RStudio > Preferences > Code > Diagnostics > Provide R Style Diagnostics (e.g., Whitespace)`, which will atuomatically flag whitespace issues for you :)
 View(df)
 
 # cleaning up df, removed NA & useless columns, call the new one td
-td <- df[-3:-7] ###CAM: It might be good to use dplyr::select here. Instead of numerals, I would use the variable names for readability. So instead of -3, I would use the name for column 3. 
+td <- df[-3:-7] ###CAM: It might be good to use dplyr::select here. Instead of numerals, I would use the variable names for readability. You could use `select(speaker, vowel)`. 
 View(td)
 
 ####gather####
 gtd <- td %>% 
-  gather(forments, value, -c(1:2, 5)) ###CAM: Added a space after the comma for readability. 
+  gather(forments, value, -c(1:2, 5)) %>% ###CAM: Added a space after the comma for readability. Gathering does not seem to be doing anything here. Since `td` only had two columns, and you are excluding the two columns, the result is the same as the input. 
   janitor::clean_names() ###CAM: This would be a good idea to add; it changes all of the variable names to lowercase. 
   
 View(gtd)   #works
