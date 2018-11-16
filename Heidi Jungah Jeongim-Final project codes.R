@@ -1,13 +1,11 @@
-install.packages("rio")
-install.packages("here")
-install.packages("vowels")
-install.packages("languageR")
+###CAM: I removed the code that installs the packages. Although it is more reproducible to have the install packages in the text, I believe there is a faux pas about installing packages onto other people's computers. 
 
 library(vowels)
 library(here)
 library(rio)
 library(languageR)
-
+library(tidyverse)###CAM: I moved the loading of tidyverse up here so all of the packages are together. 
+#library(plyr) ###CAM: If you use group_by() below, you won't need to use plyr. 
 
 #### [READ ME] ####
 ##This project aims to compare Korean native and non native vowel productions. In Section 1, we will first employ the required functions in the EDLD 610 final rubic. Afterwards, in Section 2, we will use some linguistic R packages/functions to obtain our results for research purposes.
@@ -18,99 +16,108 @@ library(languageR)
 ####Section 1. The following functions are generated to meet the requirement of EDLD 610 final peoject (we used sumamrize() above).####
 
 #l.vowels is the main dataframe we will work on, we rename it into df
-library(tidyverse)
-View(l.vowels)
-df<-l.vowels
+View(l.vowels) ###CAM: I couldn't seem to find where the l.vowels object was coming from. I would suggest moving the importing of l.vowels above this line so all of the code works from the start.
+
+df <- l.vowels ###CAM: I added spaces around the assignment operator for legibility. I've also added spaces around assignment operators and equal signs in the rest of the document. It is just a stylistic thing. In some cases, there was a space between `filter` and the first paranthesis of the function. I removed those as well. Rstudio has a handy tool under `RStudio > Preferences > Code > Diagnostics > Provide R Style Diagnostics (e.g., Whitespace)`, which will atuomatically flag whitespace issues for you :)
 View(df)
 
+# clean column names
+df <- df %>%
+  janitor::clean_names() ###CAM: This would be a good addition; it changes all of the variable names to lowercase and removes illegal characters.
+
 # cleaning up df, removed NA & useless columns, call the new one td
-td<- df[-3:-7]
+td <- df[-3:-7] ###CAM: It might be a good idea to use dplyr::select here. Instead of numerals, I would use the variable names for readability. You could use `select(speaker, vowel)`. 
 View(td)
 
+
+
 ####gather####
-gtd<-td %>% 
-  gather(Forments,Value,-c(1:2,5))
+gtd <- td %>% 
+  gather(forments, value, -c(1:2, 5)) ###CAM: Added a space after the comma for readability. Since `td` only had two columns, and you are excluding the two columns, the result is the same as the input. 
+
+  
 View(gtd)   #works
 
 ####separate####
 gtd %>% 
-  separate(Speaker, c("nativity", "number"), -1)
+  separate(speaker, c("nativity", "number"), -1) ###CAM: Great use of the `sep = -1` argument 
 
 ####spread####
 gtd %>% 
   tbl_df() %>% 
-  group_by(Vowel, Forments) %>% 
-  summarize(mean = mean(Value, na.rm = TRUE)) %>% 
-  spread(Vowel, mean)
+  group_by(vowel, forments) %>% ###CAM: Where does the `forments` variable come from?
+  summarize(mean = mean(value, na.rm = TRUE)) %>% 
+  spread(vowel, mean)
 
 ####select+ group_by+ summarize####
 #check mean vowel height (F1) by each Vowel
-F1vmean<-td %>% 
-  select(Speaker,Vowel,F1) %>% 
-  group_by(Vowel) %>% 
-  summarize(vmeanF1=mean(F1))
-F1vmean
+f1vmean <- df %>% 
+  select(speaker, vowel, f1) %>% ###CAM: I believe you removed the F1s earlier; I think you should be using df here instead of td
+  group_by(vowel) %>% 
+  summarize(vmeanf1 = mean(f1)) 
+
+f1vmean
 
 #Plot mean F1 of each vowel
-ggplot(F1vmean, aes(x=Vowel,y = vmeanF1))+
-  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+ggplot(f1vmean, aes(x = vowel, y = vmeanf1)) + 
+  geom_bar(stat = "identity", aes(fill = vowel), position = "dodge") +
   xlab("Vowel") + ylab("F1") +
   ggtitle("Mean F1 of Each Vowel") +
   theme_bw()
 
 #check mean vowel backenss (F2) by each Vowel
-F2vmean<-td %>% 
-  select(Speaker,Vowel,F2) %>% 
-  group_by(Vowel) %>% 
-  summarize(vmeanF2=mean(F2))
-F2vmean
+f2vmean <- df %>%  ###CAM: Again, I think you should be using df here instead of td.
+  select(speaker, vowel, f2) %>% 
+  group_by(vowel) %>% 
+  summarize(vmeanf2 = mean(f2))
+f2vmean
 
 #Plot mean F2 of each vowel
-ggplot(F2vmean, aes(x=Vowel,y = vmeanF2))+
-  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+ggplot(f2vmean, aes(x = vowel, y = vmeanf2)) +
+  geom_bar(stat = "identity", aes(fill = vowel), position = "dodge") +
   xlab("Vowel") + ylab("F2") +
   ggtitle("Mean F2 of Each Vowel") +
   theme_bw()
 
 ####filter+ group_by+ summarize####
 #native F1 mean and sd of each vowel
-F1n<-td %>%
-  filter (Country=="Native Korean") %>% 
-  group_by(Vowel) %>% 
-  summarize(nmean_F1 = mean(F1),
-            nsd_F1 = sd(F1))
+f1n <- df %>% ###CAM: Same note as above.
+  filter(country == "Native Korean") %>%
+  group_by(vowel) %>% 
+  summarize(nmean_f1 = mean(f1),
+            nsd_f1 = sd(f1))
 
-F1n #native's mean F1 & sd of vowel i
+f1n #native's mean F1 & sd of vowel i
 
 #plot of native speakers' F1
-td %>% 
-  filter (Country=="Native Korean") %>% 
-  group_by(Vowel) %>% 
-  ggplot(aes(x = Vowel, y = F1)) +
-  geom_line(aes(group = Vowel)) +
-  geom_point()+
-  geom_boxplot()+
-  xlab("Vowel") + ylab("F1") +
-  ggtitle("F1 of Native Speakers") +
-  theme_bw()
+df %>% ###CAM: Again, I think you should be using df here instead of td.
+  filter(country == "Native Korean") %>% 
+  group_by(vowel) %>% 
+  ggplot(aes(x = vowel, y = f_1)) +
+    geom_line(aes(group = vowel)) + ###CAM: I added indents here because I think it makes it easier to tell that the ggplot geoms are adding to the initial ggplot function call. 
+    geom_point() +
+    geom_boxplot() +
+    xlab("Vowel") + ylab("F1") +
+    ggtitle("F1 of Native Speakers") +
+    theme_bw()
 
 #non-native F1 mean and sd of each vowel
-F1nn<-td %>%
-  filter (Country=="Non native Korean") %>% 
-  group_by(Vowel) %>% 
-  summarize(nnmean_F1 = mean(F1),
-            nnsd_F1 = sd(F1))
+f1nn <- df %>% ###CAM: Again, I think you should be using df here instead of td.
+  filter(country == "Non native Korean") %>% 
+  group_by(vowel) %>% 
+  summarize(nnmean_f1 = mean(f1),
+            nnsd_f1 = sd(f1))
 
-F1nn #native's mean F1 & sd of vowel i
+f1nn #native's mean F1 & sd of vowel i
 
 #plot of non-native speakers' F1
-td %>% 
-  filter (Country=="Non native Korean") %>% 
-  group_by(Vowel) %>% 
-  ggplot(aes(x = Vowel, y = F1)) +
-  geom_line(aes(group = Vowel)) +
-  geom_point()+
-  geom_boxplot()+
+df %>% ###CAM: Same note as above.
+  filter(country == "Non native Korean") %>% 
+  group_by(vowel) %>% 
+  ggplot(aes(x = vowel, y = f1)) +
+  geom_line(aes(vroup = vowel)) +
+  geom_point() +
+  geom_boxplot() +
   xlab("Vowel") + ylab("F1") +
   ggtitle("F1 of Non-Native Speakers") +
   theme_bw()
@@ -124,7 +131,7 @@ nnk <- import(here("data", "NNK.xls"))
 
 # Putting both datasets together into one. To compare the vowel productions, we need to normalize the data, aiming to get rid of influential factors such as speaker body size, gender, etc. Vowel normalization is necessary because it makes the forments of different speaker comparable.  
 
-View(nk)
+View(nk) #CAM: I prefer not to use View in my scripts because it moves focus from the script you are working on to the data in a seperate tab. This can make it hard to quickly run through all of your code.
 View(nnk)
 dim(nk)  #72 rows (speech samples) of 3 native speakers' 3 repetitions of 8 vowels
 dim(nnk) #72 rows (speech samples) of 3 non-native speakers' 3 repetitions of 8vowels
@@ -145,12 +152,17 @@ View(l.vowels)
 #The following codes are based on a template to create Vowel charts, they may seem redundant, but... sorry
 
 # The asterisks in the headings are weird -- rename the F*1 & F*2 columns
-l.vowels$F1 <- l.vowels[,4]
-l.vowels$F2 <- l.vowels[,5]
+#l.vowels$F1 <- l.vowels[,4]
+#l.vowels$F2 <- l.vowels[,5]
+names(l.vowels) <- gsub("\\*", "", names(l.vowels)) ###CAM: Here is an alternative way of removing the asterisks from the column names. The benefit is that you do not have to create new varaibles. Essentially, gsub takes all matches of a pattern (in this case "*") and replaces it with a string (in this case nothing). The "\\" before the asterisk is so that "*" is not interpreted as a special character.
+
 
 # Change Speaker and Vowel into factors
-l.vowels$Speaker <- as.factor(l.vowels$Speaker)
-l.vowels$Vowel <- as.factor(l.vowels$Vowel)
+#l.vowels$Speaker <- as.factor(l.vowels$Speaker)
+#l.vowels$Vowel <- as.factor(l.vowels$Vowel)
+l.vowels <- l.vowels %>% 
+  mutate(Speaker = factor(Speaker),
+         Vowel = factor(Vowel)) ###CAM: Although the way you converted the variables to factors is not incorrect, I've included how you would do it using dplyr.
 
 # How many speakers do we have?
 levels(l.vowels$Speaker)  #the answer is 6, NS=3, NNS=3
@@ -160,8 +172,11 @@ l.vowels$Country <- NA
 
 # Same as above for country
 l.vowels$Country[l.vowels$Speaker %in% c("NS1", "NS2", "NS3")] <- "Native Korean"
-l.vowels$Country[l.vowels$Speaker %in% c("NNS1", "NNS2", "NNS3")] <- "Non native Korean"
-l.vowels$Country <- as.factor(l.vowels$Country)
+l.vowels$Country[l.vowels$Speaker %in% c("NNS1", "NNS2", "NNS3")] <- "Non native Korean" ###CAM: I included code near the end of this document showing how to do this using spread. The code is on line 228.
+
+#l.vowels$Country <- as.factor(l.vowels$Country)
+l.vowels <- l.vowels %>% 
+  mutate(Country = factor(Country)) ###CAM:Again, here is the dplyr way to convert country to a factor. 
 levels(l.vowels$Country)
 
 # Token counts
@@ -173,20 +188,33 @@ table(l.vowels$Speaker, l.vowels$Vowel) #3 repetition for each vowel, each speak
 
 table(l.vowels$Country, l.vowels$Speaker) #Native and Non-Native both have 3(repetitions)*8(vowels)=24 speech samples
 
-install.packages("plyr")
-library(plyr)
-
 # To get summary stats by country and by vowel, [summarize] is used here!
-summary.c.vowels <- ddply(l.vowels, .(Country, Vowel), summarise, N = length(F1), MeanF1 = mean(F1), SDF1 = sd(F1), SEF1 = sd(F1)/sqrt(length(F1)), MeanF2 = abs(mean(F2)), SDF2 = sd(F2), SEF2 = sd(F2)/sqrt(length(F2)))
-
-View(summary.c.vowels)
+summary.c.vowels <- l.vowels %>%
+  group_by(Country, Vowel) %>%
+  summarise(N = length(F1), 
+            MeanF1 = mean(F1), 
+            SDF1 = sd(F1), 
+            SEF1 = sd(F1) / sqrt(length(F1)), 
+            MeanF2 = abs(mean(F2)), 
+            SDF2 = sd(F2), 
+            SEF2 = sd(F2) / sqrt(length(F2))) ###CAM: The text was hard to read here. I added new lines, indent, and piping to make it easier to read. It also doesn't look like you needed plyr, so I removed the loading of that package as well. 
 
 ####Vowel Charts####
 
 # Plotting everything at once to look at outliers
-vowelplot(l.vowels, color="vowels", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, size=.75)
+#vowelplot(l.vowels, 
+#          color = "vowels", 
+#          label = "vowels", 
+#          xlim = c(4.5,-4.5), 
+#          ylim = c(4.5,-4.5), 
+#          leg = NA, 
+#          size = .75)
 
-# Lots of outliers, so should probably trim
+ggplot(l.vowels, aes(x = F2, y = F1, color = Vowel, shape = Vowel)) +
+  geom_point() +
+  scale_shape_manual(values = 1:nlevels(l.vowels$Vowel))###CAM: Here is an alternative way to create the above plot using ggplot. Although, I could be missing some important aspect of vowelplot. 
+
+# Lots of outliers, so should probably trim 
 
 ####Formatting#####
 # In order to plot by group, need to convince the program that "country" is really "speaker"
@@ -195,33 +223,94 @@ vowelplot(l.vowels, color="vowels", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5
 lc.vowels <- l.vowels
 lc.vowels$SpeakerNum <- lc.vowels[,1] #adding a speakerNum column at the end
 lc.vowels[,1] <- lc.vowels$Country #changing the "Speaker" column to "Country"
-View(lc.vowels)
+View(lc.vowels) ###CAM: Instead of doing this, I might suggest using dplyr::separate in the first place to create a Country column with ns/nns and a number column with the speaker number in it. You can then recode the Country column to replace NNS and NS with non-native korean and native korean. I included the code below as an example:
+
+l.vowels %>%
+  separate(Speaker, into = c("Country", "SpeakerNum"), -1) %>%
+  mutate(Country = recode(Country, "NNS" = "Non-native Korean",
+                                   "NS" = "Native Korean"))
 
 # Each individual's production, grouped by country
-vowelplot(lc.vowels, color="vowels", speaker="Native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), title="Native Korean speakers", size=.75)
+vowelplot(lc.vowels, 
+          color = "vowels", 
+          speaker = "Native Korean", 
+          label = "vowels", 
+          xlim = c(4.5,-4.5), 
+          ylim = c(4.5,-4.5), 
+          title = "Native Korean speakers", 
+          size = .75)
 
-add.spread.vowelplot(lc.vowels[,1:7], speaker="Native Korean", sd.mult=1, ellipsis=T, color="vowels")
+add.spread.vowelplot(lc.vowels[,1:7], 
+                     speaker = "Native Korean", 
+                     sd.mult = 1, 
+                     ellipsis = T, 
+                     color = "vowels")
 
-vowelplot(lc.vowels, color="vowels", speaker="Non native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, title="Non-native Korean speakers", size=.75)
+vowelplot(lc.vowels, 
+          color = "vowels", 
+          speaker = "Non native Korean", 
+          label = "vowels", 
+          xlim = c(4.5,-4.5), y
+          lim = c(4.5,-4.5), 
+          leg = NA, 
+          title = "Non-native Korean speakers", 
+          size = .75)
 
-add.spread.vowelplot(lc.vowels[,1:7], speaker="Non native Korean", sd.mult=1, ellipsis=T, color="vowels")
-
+add.spread.vowelplot(lc.vowels[,1:7], 
+                     speaker = "Non native Korean", 
+                     sd.mult = 1, 
+                     ellipsis = T, 
+                     color = "vowels") 
 
 # Plotting just the mean values, grouped by country
 
 # Another way to summarize the data
-nk.means <- compute.means(lc.vowels[,1:7], speaker="Native Korean")
-nnk.means <- compute.means(lc.vowels[,1:7], speaker="Non native Korean")
+nk.means <- compute.means(lc.vowels[,1:7], speaker = "Native Korean")
+nnk.means <- compute.means(lc.vowels[,1:7], speaker = "Non native Korean")
 both.means <- rbind(nk.means, nnk.means)
 
-vowelplot(nk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Native Korean speakers", leg=NA, size=1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Native Korean")
+vowelplot(nk.means, 
+          color = "vowels", 
+          label = "vowels", 
+          xlim = c(3, -3), 
+          ylim = c(3, -3), 
+          title = "Native Korean speakers", 
+          leg = NA, 
+          size = 1.75)
 
-vowelplot(nnk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Non-native Korean speakers", leg=NA, size=1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Non native Korean")
+add.spread.vowelplot(lc.vowels[,1:7], 
+                     sd.mult = 1, 
+                     ellipsis = T, 
+                     color = "vowels", 
+                     speaker = "Native Korean")
+
+vowelplot(nnk.means, 
+          color = "vowels", 
+          label = "vowels", 
+          xlim = c(3, -3), 
+          ylim = c(3, -3), 
+          title = "Non-native Korean speakers", 
+          leg = NA, 
+          size = 1.75)
+
+add.spread.vowelplot(lc.vowels[,1:7], 
+                     sd.mult = 1, 
+                     ellipsis = T, 
+                     color = "vowels", 
+                     speaker = "Non native Korean") ###CAM: Very cool!
 
 # Plotting mean values for both countries on one plot
-vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-3), title="Both groups of speakers", size=1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
+vowelplot(both.means, 
+          color = "speakers", 
+          label = "vowels", 
+          xlim = c(3,-3),
+          ylim = c(3,-3), 
+          title = "Both groups of speakers", 
+          size = 1.75)
+
+add.spread.vowelplot(lc.vowels[ ,1:7], 
+                     sd.mult = 1, 
+                     ellipsis = T, 
+                     color = "speakers") ###CAM: Also, very cool!
 
 
