@@ -171,7 +171,8 @@ l.vowels$Country <- NA
 
 # Same as above for country
 l.vowels$Country[l.vowels$Speaker %in% c("NS1", "NS2", "NS3")] <- "Native Korean"
-l.vowels$Country[l.vowels$Speaker %in% c("NNS1", "NNS2", "NNS3")] <- "Non native Korean"
+l.vowels$Country[l.vowels$Speaker %in% c("NNS1", "NNS2", "NNS3")] <- "Non native Korean" ###Cam: I included code near the end of this document showing how to do this using spread.
+
 #l.vowels$Country <- as.factor(l.vowels$Country)
 l.vowels <- l.vowels %>% 
   mutate(Country = factor(Country)) ###CAM: Here is the dplyr way to convert country to a factor. 
@@ -209,7 +210,7 @@ summary.c.vowels <- l.vowels %>%
 #          size = .75)
 
 ggplot(l.vowels, aes(x = F2, y = F1, color = Vowel, pch = Vowel)) +
-  geom_point() ###CAM: Here is an alternative way to create the above plot using ggplot. 
+  geom_point() ###CAM: Here is an alternative way to create the above plot using ggplot. Although, I could missing some important functions that vowelplot uses. 
 
 # Lots of outliers, so should probably trim 
 
@@ -220,7 +221,12 @@ ggplot(l.vowels, aes(x = F2, y = F1, color = Vowel, pch = Vowel)) +
 lc.vowels <- l.vowels
 lc.vowels$SpeakerNum <- lc.vowels[,1] #adding a speakerNum column at the end
 lc.vowels[,1] <- lc.vowels$Country #changing the "Speaker" column to "Country"
-View(lc.vowels)
+View(lc.vowels) ###CAM: Instead of doing this, I might suggest using dplyr::separate in the first place to create a Country column with ns/nns and a number column with the speaker number in it. I included the code below as an example:
+
+l.vowels %>%
+  separate(Speaker, into = c("Country", "SpeakerNum"), -1) %>%
+  mutate(Country = recode(Country, "NNS" = "Non-native Korean",
+                                   "NS" = "Native Korean"))
 
 # Each individual's production, grouped by country
 vowelplot(lc.vowels, color = "vowels", speaker = "Native Korean", label = "vowels", xlim = c(4.5,-4.5), ylim = c(4.5,-4.5), title = "Native Korean speakers", size = .75)
