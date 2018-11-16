@@ -28,7 +28,8 @@ View(td)
 ####gather####
 gtd <- td %>% 
   gather(forments, value, -c(1:2, 5)) ###CAM: Added a space after the comma for readability. 
-  janitor::clean_names() ###CAM: This would be a good idea to add to change all of the variable names to lowercase. 
+  janitor::clean_names() ###CAM: This would be a good idea to add; it changes all of the variable names to lowercase. 
+  
 View(gtd)   #works
 
 ####separate####
@@ -86,7 +87,7 @@ td %>%
   filter(country == "Native Korean") %>% 
   group_by(vowel) %>% 
   ggplot(aes(x = vowel, y = f1)) +
-    geom_line(aes(group = vowel)) + ###CAM: I added indents her because I think it makes it easier to tell that the ggplot geoms are adding to the initial ggplot function call. 
+    geom_line(aes(group = vowel)) + ###CAM: I added indents here because I think it makes it easier to tell that the ggplot geoms are adding to the initial ggplot function call. 
     geom_point() +
     geom_boxplot() +
     xlab("Vowel") + ylab("F1") +
