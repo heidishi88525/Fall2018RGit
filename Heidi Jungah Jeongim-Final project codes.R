@@ -5,6 +5,7 @@ library(here)
 library(rio)
 library(languageR)
 library(tidyverse)###CAM: I moved the loading of tidyverse up here so all of the packages are together. 
+library(plyr)###CAM: Same here. 
 
 
 #### [READ ME] ####
@@ -173,7 +174,9 @@ l.vowels$Country <- NA
 # Same as above for country
 l.vowels$Country[l.vowels$Speaker %in% c("NS1", "NS2", "NS3")] <- "Native Korean"
 l.vowels$Country[l.vowels$Speaker %in% c("NNS1", "NNS2", "NNS3")] <- "Non native Korean"
-l.vowels$Country <- as.factor(l.vowels$Country)
+#l.vowels$Country <- as.factor(l.vowels$Country)
+l.vowels <- l.vowels %>% 
+  mutate(Country = factor(Country)) ###CAM: Here is the dplyr way to convert country to a factor. 
 levels(l.vowels$Country)
 
 # Token counts
@@ -184,9 +187,6 @@ table(l.vowels$Vowel) #each vowel is produced 3(repetitions)*6(speakers)=18 time
 table(l.vowels$Speaker, l.vowels$Vowel) #3 repetition for each vowel, each speaker
 
 table(l.vowels$Country, l.vowels$Speaker) #Native and Non-Native both have 3(repetitions)*8(vowels)=24 speech samples
-
-install.packages("plyr")
-library(plyr)
 
 # To get summary stats by country and by vowel, [summarize] is used here!
 summary.c.vowels <- ddply(l.vowels, .(Country, Vowel), summarise, N = length(F1), MeanF1 = mean(F1), SDF1 = sd(F1), SEF1 = sd(F1)/sqrt(length(F1)), MeanF2 = abs(mean(F2)), SDF2 = sd(F2), SEF2 = sd(F2)/sqrt(length(F2)))
