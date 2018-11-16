@@ -21,48 +21,55 @@ View(l.vowels) ###CAM: I couldn't seem to find where the l.vowels object was com
 df <- l.vowels ###CAM: I added spaces around the assignment operator for legibility. I've also added spaces around assignment operators and equal signs in the rest of the document. It is just a stylistic thing. In some cases, there was a space between `filter` and the first paranthesis of the function. I removed those as well. Rstudio has a handy tool under `RStudio > Preferences > Code > Diagnostics > Provide R Style Diagnostics (e.g., Whitespace)`, which will atuomatically flag whitespace issues for you :)
 View(df)
 
+# clean column names
+df <- df %>%
+  janitor::clean_names() ###CAM: This would be a good idea to add; it changes all of the variable names to lowercase. 
+
 # cleaning up df, removed NA & useless columns, call the new one td
 td <- df[-3:-7] ###CAM: It might be good to use dplyr::select here. Instead of numerals, I would use the variable names for readability. You could use `select(speaker, vowel)`. 
 View(td)
 
+
+
 ####gather####
 gtd <- td %>% 
-  gather(forments, value, -c(1:2, 5)) %>% ###CAM: Added a space after the comma for readability. Gathering does not seem to be doing anything here. Since `td` only had two columns, and you are excluding the two columns, the result is the same as the input. 
-  janitor::clean_names() ###CAM: This would be a good idea to add; it changes all of the variable names to lowercase. 
+  gather(forments, value, -c(1:2, 5)) ###CAM: Added a space after the comma for readability. Gathering does not seem to be doing anything here. Since `td` only had two columns, and you are excluding the two columns, the result is the same as the input. 
+
   
 View(gtd)   #works
 
 ####separate####
 gtd %>% 
-  separate(speaker, c("nativity", "number"), -1)
+  separate(speaker, c("nativity", "number"), -1) ###CAM: Great use of the `sep = -1` argument 
 
 ####spread####
 gtd %>% 
   tbl_df() %>% 
-  group_by(vowel, forments) %>% 
+  group_by(vowel, forments) %>% ###CAM: Where does the `forments` variable come from?
   summarize(mean = mean(value, na.rm = TRUE)) %>% 
   spread(vowel, mean)
 
 ####select+ group_by+ summarize####
 #check mean vowel height (F1) by each Vowel
-f1vmean <- td %>% 
-  select(speaker, vowel, f1) %>% 
+f1vmean <- df %>% 
+  select(speaker, vowel, f_1) %>% ###CAM: I believe you removed the F1s earlier; I think you should be using DF here instead
   group_by(vowel) %>% 
-  summarize(vmeanF1 = mean(f1))
+  summarize(vmeanf1 = mean(f_1)) 
+
 f1vmean
 
 #Plot mean F1 of each vowel
-ggplot(f1vmean, aes(x = Vowel, y = vmeanf1)) + ###CAM: added columns for readability. 
+ggplot(f1vmean, aes(x = vowel, y = vmeanf1)) + ###CAM: added columns for readability. 
   geom_bar(stat = "identity", aes(fill = vowel), position = "dodge") +
   xlab("Vowel") + ylab("F1") +
   ggtitle("Mean F1 of Each Vowel") +
   theme_bw()
 
 #check mean vowel backenss (F2) by each Vowel
-f2vmean <- td %>% 
-  select(speaker, vowel, f2) %>% 
+f2vmean <- df %>%  ###CAM: Again, I think you should be using df here instead of td.
+  select(speaker, vowel, f_2) %>% 
   group_by(vowel) %>% 
-  summarize(vmeanf2 = mean(f2))
+  summarize(vmeanf2 = mean(f_2))
 f2vmean
 
 #Plot mean F2 of each vowel
@@ -74,19 +81,19 @@ ggplot(f2vmean, aes(x = vowel, y = vmeanf2)) +
 
 ####filter+ group_by+ summarize####
 #native F1 mean and sd of each vowel
-f1n <- td %>%
-  filter(Country == "Native Korean") %>% 
+f1n <- df %>% ###CAM: Again, I think you should be using df here instead of td.
+  filter(Country == "Native Korean") %>%  ###CAM: I'm not sure where the `Country` variable came from.
   group_by(vowel) %>% 
-  summarize(nmean_F1 = mean(f1),
-            nsd_F1 = sd(f1))
+  summarize(nmean_f1 = mean(f_1),
+            nsd_f1 = sd(f_1))
 
 f1n #native's mean F1 & sd of vowel i
 
 #plot of native speakers' F1
-td %>% 
+td %>% ###CAM: Again, I think you should be using df here instead of td, but I do not know where `country` is coming from on the next line.
   filter(country == "Native Korean") %>% 
   group_by(vowel) %>% 
-  ggplot(aes(x = vowel, y = f1)) +
+  ggplot(aes(x = vowel, y = f_1)) +
     geom_line(aes(group = vowel)) + ###CAM: I added indents here because I think it makes it easier to tell that the ggplot geoms are adding to the initial ggplot function call. 
     geom_point() +
     geom_boxplot() +
@@ -95,19 +102,19 @@ td %>%
     theme_bw()
 
 #non-native F1 mean and sd of each vowel
-f1nn <- td %>%
+f1nn <- td %>% ###CAM: Again, I think you should be using df here instead of td, but I do not know where `country` is coming from on the next line.
   filter(country == "Non native Korean") %>% 
   group_by(vowel) %>% 
-  summarize(nnmean_f1 = mean(f1),
-            nnsd_f1 = sd(f1))
+  summarize(nnmean_f1 = mean(f_1),
+            nnsd_f1 = sd(f_1))
 
 f1nn #native's mean F1 & sd of vowel i
 
 #plot of non-native speakers' F1
-td %>% 
+td %>% ###CAM: Again, I think you should be using df here instead of td, but I do not know where `country` is coming from on the next line.
   filter(country == "Non native Korean") %>% 
   group_by(vowel) %>% 
-  ggplot(aes(x = vowel, y = F1)) +
+  ggplot(aes(x = vowel, y = f_1)) +
   geom_line(aes(vroup = vowel)) +
   geom_point() +
   geom_boxplot() +
