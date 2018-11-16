@@ -5,8 +5,6 @@ library(here)
 library(rio)
 library(languageR)
 library(tidyverse)###CAM: I moved the loading of tidyverse up here so all of the packages are together. 
-library(plyr)###CAM: Same here. 
-
 
 #### [READ ME] ####
 ##This project aims to compare Korean native and non native vowel productions. In Section 1, we will first employ the required functions in the EDLD 610 final rubic. Afterwards, in Section 2, we will use some linguistic R packages/functions to obtain our results for research purposes.
@@ -189,9 +187,15 @@ table(l.vowels$Speaker, l.vowels$Vowel) #3 repetition for each vowel, each speak
 table(l.vowels$Country, l.vowels$Speaker) #Native and Non-Native both have 3(repetitions)*8(vowels)=24 speech samples
 
 # To get summary stats by country and by vowel, [summarize] is used here!
-summary.c.vowels <- ddply(l.vowels, .(Country, Vowel), summarise, N = length(F1), MeanF1 = mean(F1), SDF1 = sd(F1), SEF1 = sd(F1)/sqrt(length(F1)), MeanF2 = abs(mean(F2)), SDF2 = sd(F2), SEF2 = sd(F2)/sqrt(length(F2)))
-
-View(summary.c.vowels)
+summary.c.vowels <- l.vowels %>%
+  group_by(Country, Vowel) %>%
+  summarise(N = length(F1), 
+            MeanF1 = mean(F1), 
+            SDF1 = sd(F1), 
+            SEF1 = sd(F1) / sqrt(length(F1)), 
+            MeanF2 = abs(mean(F2)), 
+            SDF2 = sd(F2), 
+            SEF2 = sd(F2) / sqrt(length(F2))) ###CAM: The text was hard to read here. I added new lines, indent, and piping to make it easier to read. It also doesn't look like you needed plyr, so I removed the loading of that package as well. 
 
 ####Vowel Charts####
 
