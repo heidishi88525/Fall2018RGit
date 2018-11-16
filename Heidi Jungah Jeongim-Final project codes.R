@@ -200,9 +200,18 @@ summary.c.vowels <- l.vowels %>%
 ####Vowel Charts####
 
 # Plotting everything at once to look at outliers
-vowelplot(l.vowels, color = "vowels", label = "vowels", xlim = c(4.5,-4.5), ylim = c(4.5,-4.5), leg = NA, size = .75)
+#vowelplot(l.vowels, 
+#          color = "vowels", 
+#          label = "vowels", 
+#          xlim = c(4.5,-4.5), 
+#          ylim = c(4.5,-4.5), 
+#          leg = NA, 
+#          size = .75)
 
-# Lots of outliers, so should probably trim
+ggplot(l.vowels, aes(x = F2, y = F1, color = Vowel, pch = Vowel)) +
+  geom_point() ###CAM: Here is an alternative way to create the above plot using ggplot. 
+
+# Lots of outliers, so should probably trim 
 
 ####Formatting#####
 # In order to plot by group, need to convince the program that "country" is really "speaker"
