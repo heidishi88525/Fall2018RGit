@@ -27,86 +27,87 @@ View(td)
 
 ####gather####
 gtd <- td %>% 
-  gather(Forments, Value, -c(1:2,5))
+  gather(forments, value, -c(1:2, 5)) ###CAM: Added a space after the comma for readability. 
+  janitor::clean_names() ###CAM: This would be a good idea to add to change all of the variable names to lowercase. 
 View(gtd)   #works
 
 ####separate####
 gtd %>% 
-  separate(Speaker, c("nativity", "number"), -1)
+  separate(speaker, c("nativity", "number"), -1)
 
 ####spread####
 gtd %>% 
   tbl_df() %>% 
-  group_by(Vowel, Forments) %>% 
-  summarize(mean = mean(Value, na.rm = TRUE)) %>% 
-  spread(Vowel, mean)
+  group_by(vowel, forments) %>% 
+  summarize(mean = mean(value, na.rm = TRUE)) %>% 
+  spread(vowel, mean)
 
 ####select+ group_by+ summarize####
 #check mean vowel height (F1) by each Vowel
-F1vmean <- td %>% 
-  select(Speaker,Vowel,F1) %>% 
-  group_by(Vowel) %>% 
-  summarize(vmeanF1 = mean(F1))
-F1vmean
+f1vmean <- td %>% 
+  select(speaker, vowel, f1) %>% 
+  group_by(vowel) %>% 
+  summarize(vmeanF1 = mean(f1))
+f1vmean
 
 #Plot mean F1 of each vowel
-ggplot(F1vmean, aes(x = Vowel,y = vmeanF1)) +
-  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+ggplot(f1vmean, aes(x = Vowel, y = vmeanf1)) + ###CAM: added columns for readability. 
+  geom_bar(stat = "identity", aes(fill = vowel), position = "dodge") +
   xlab("Vowel") + ylab("F1") +
   ggtitle("Mean F1 of Each Vowel") +
   theme_bw()
 
 #check mean vowel backenss (F2) by each Vowel
-F2vmean <- td %>% 
-  select(Speaker,Vowel,F2) %>% 
-  group_by(Vowel) %>% 
-  summarize(vmeanF2 = mean(F2))
-F2vmean
+f2vmean <- td %>% 
+  select(speaker, vowel, f2) %>% 
+  group_by(vowel) %>% 
+  summarize(vmeanf2 = mean(f2))
+f2vmean
 
 #Plot mean F2 of each vowel
-ggplot(F2vmean, aes(x = Vowel,y = vmeanF2)) +
-  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+ggplot(f2vmean, aes(x = vowel, y = vmeanf2)) +
+  geom_bar(stat = "identity", aes(fill = vowel), position = "dodge") +
   xlab("Vowel") + ylab("F2") +
   ggtitle("Mean F2 of Each Vowel") +
   theme_bw()
 
 ####filter+ group_by+ summarize####
 #native F1 mean and sd of each vowel
-F1n <- td %>%
+f1n <- td %>%
   filter(Country == "Native Korean") %>% 
-  group_by(Vowel) %>% 
-  summarize(nmean_F1 = mean(F1),
-            nsd_F1 = sd(F1))
+  group_by(vowel) %>% 
+  summarize(nmean_F1 = mean(f1),
+            nsd_F1 = sd(f1))
 
-F1n #native's mean F1 & sd of vowel i
+f1n #native's mean F1 & sd of vowel i
 
 #plot of native speakers' F1
 td %>% 
-  filter(Country == "Native Korean") %>% 
-  group_by(Vowel) %>% 
-  ggplot(aes(x = Vowel, y = F1)) +
-  geom_line(aes(group = Vowel)) +
-  geom_point() +
-  geom_boxplot() +
-  xlab("Vowel") + ylab("F1") +
-  ggtitle("F1 of Native Speakers") +
-  theme_bw()
+  filter(country == "Native Korean") %>% 
+  group_by(vowel) %>% 
+  ggplot(aes(x = vowel, y = f1)) +
+    geom_line(aes(group = vowel)) + ###CAM: I added indents her because I think it makes it easier to tell that the ggplot geoms are adding to the initial ggplot function call. 
+    geom_point() +
+    geom_boxplot() +
+    xlab("Vowel") + ylab("F1") +
+    ggtitle("F1 of Native Speakers") +
+    theme_bw()
 
 #non-native F1 mean and sd of each vowel
-F1nn <- td %>%
-  filter(Country == "Non native Korean") %>% 
-  group_by(Vowel) %>% 
-  summarize(nnmean_F1 = mean(F1),
-            nnsd_F1 = sd(F1))
+f1nn <- td %>%
+  filter(country == "Non native Korean") %>% 
+  group_by(vowel) %>% 
+  summarize(nnmean_f1 = mean(f1),
+            nnsd_f1 = sd(f1))
 
-F1nn #native's mean F1 & sd of vowel i
+f1nn #native's mean F1 & sd of vowel i
 
 #plot of non-native speakers' F1
 td %>% 
-  filter(Country == "Non native Korean") %>% 
-  group_by(Vowel) %>% 
-  ggplot(aes(x = Vowel, y = F1)) +
-  geom_line(aes(group = Vowel)) +
+  filter(country == "Non native Korean") %>% 
+  group_by(vowel) %>% 
+  ggplot(aes(x = vowel, y = F1)) +
+  geom_line(aes(vroup = vowel)) +
   geom_point() +
   geom_boxplot() +
   xlab("Vowel") + ylab("F1") +
