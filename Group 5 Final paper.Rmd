@@ -78,7 +78,7 @@ knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 \newpage
 
 # **1.Introduction**
-We used @pan2011 XXXX
+In this paper, our group investigated Korean vowel productions of Korean native speakers (NS) and non-native Korean speakers (NNS) by analyzing acoustic features. We aimed to examine native speaker pattern of vowel formants in Korean, and to explore second language learners’ patterns in comparison to those of NNSs. Our results were analyzed by using normalization and statistic functions in the R program. The results indicate that L1 (English) of the NNSs might affect their L2 Korean vowel production. It is important to know what sounds students may have trouble with and what causes the difficulty in L2 Korean acquisition (Idemaru, 2018). Thus, this study is useful in terms of as well as suggesting crucial research in the second language education field. 
 
 # **2. Methodology**
 We adopted the method introduced by @pan2011, the author of *Phonetics and phonology of Nantong Chinese*We used methods introduced by @ahmed2001. Besides we also adopted the diligent and collaborative approach to Rstudio (see @kadar2011).
