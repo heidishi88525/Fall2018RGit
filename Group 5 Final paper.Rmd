@@ -1,0 +1,115 @@
+---
+title             : "A Comparative Analysis on Native and Non-Native Korean Speakers' Vowel Productions"
+shorttitle        : "Korean Vowels"
+
+author: 
+  - name          : "Jungah-Lee"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "1248 University of Oregon Eugene, Oregon 97403-1248"
+    email         : "jlee27@uoregon.com"
+  - name          : "Heidi Shi"
+    affiliation   : "2"
+  - name          : "Jeongim Jin"
+    affiliation   : "3"
+
+affiliation:
+  - id            : "1"
+    institution   : "University of Oregon"
+  - id            : "2"
+    institution   : "University of Oregon"
+  - id            : "3"
+    institution   : "University of Oregon"
+
+authornote: |
+  Jung-ah Lee joined the Department of East Asian Langauges and Literatures at the Unviersity of Oregon at 2017.
+
+
+abstract: |
+
+  
+  <!-- https://tinyurl.com/ybremelq -->
+  
+keywords          : "Community of Practice, Language Socialization"
+wordcount         : "X"
+
+bibliography      : ["Group 5 final-references.bib"]
+
+floatsintext      : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "man, fleqn, noextraspace"
+output            : 
+                   papaja::apa6_pdf:
+                     toc: true
+                     toc_depth: 4
+                    
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.width = 6.5,
+                      fig.height = 8)
+library(rio)
+library(here)
+library(tidyverse)
+library(janitor)
+library("papaja")
+
+theme_set(theme_minimal(base_size = 8))
+
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+
+\newpage
+
+# **1.Introduction**
+We used @pan2011 XXXX
+
+# **2. Methodology**
+We adopted the method introduced by @pan2011, the author of *Phonetics and phonology of Nantong Chinese*We used methods introduced by @ahmed2001. Besides we also adopted the diligent and collaborative approach to Rstudio (see @kadar2011).
+
+## *2.1 Participants*
+The authors gathered teenagers who attend different schools on the Pacific Northwest, *Eugene,Oregon*.
+
+### Korean Native Speakers ###
+n=3
+
+### Korean Non-native Speakers ###
+n=3
+
+## *2.2 Speech Materials*
+
+## *2.3 Procedure*
+
+# **3. Restuls and Discussion**
+
+# **4. Conclusion**
+
+\newpage
+
+# **References**
+```{r create_r-references}
+r_refs(file = "Group 5 final-references.bib")
+```
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
