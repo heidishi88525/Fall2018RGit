@@ -89,16 +89,16 @@ In this paper, our group investigated Korean vowel productions of Korean native 
 # **2. Methodology**
 We adopted the method introduced by @pan2011, the author of *Phonetics and phonology of Nantong Chinese*We used methods introduced by @ahmed2001. Besides we also adopted the diligent and collaborative approach to Rstudio (see @kadar2011).
 
-To compare the convergence and divergence of L1 Korean and L2 Korean Vowel Production, we used a one-way between-subjects design, and analyzed the collected data using two Hz-basd measurements and a phonetic measurement tool, Praat. 
+To compare the convergence and divergence of L1 Korean and L2 Korean Vowel Production, we used a one-way between-subjects design, and analyzed the collected data using a one-way ANOVA.
 
 ## *2.1 Participants*
-Using convenince sampling, we sampled six adult residents living in Eugene, Oregon; three of them were Native Koreans, and the rest were non-Native sperking Koreans. Their Korean vowles were audie-recorded.   *Eugene,Oregon*.
+Using convenince sampling, we sampled six adult residents living in Eugene, Oregon; three of them were Native Koreans, and the rest were non-Native sperking Koreans. Two Native Koreans were doctoral students majoring in East Asian Lanuages and Literatures, and the other one was a Korean instructor at the University of Oregon. Non-native speakers were recruited from one of the Korean classes at the Univeresity of Oregon. Korean participants were an average of 28 in age, while the average age of the non-Korean subjects were 19. 
 
 ## *2.2 Speech Materials*
-To look at the differences between NS and NNS in terms of vowel sounds, we used the same materials including a,e,i,o,u. 
+We prepared seven sentences consisting of eight Korean vowels; i,e,ae,w,^,a,u. The sentences to be tested will be added at the end of the orignial paper as one of the appendice. 
 
 ## *2.3 Procedure
-We have two sets of linguistic data collected from three native speakers (NS) of Korean and three non- native speakers (NNS) of Korean (shared L1 English). During the original data collection, the six speakers were asked to produce eight Korean vowels orally, and each vowel is repeated three times for audio recording. The acoustic data is later quantified by two Hz-based acoustic measurements: F1(reflects vowel height) and F2 (indicates vowel backness). For each vowel, F1 and F2 always occur in pairs so as to provide locational information of the resonance in a speaker’s vocal cavity. The exact value of F1 and F2 are obtained through software called Praat, which is widely used in phonetic measurements.  
+The Korean vowles of the participants were audie-recorded. We met in the quite room individally and we had them repeat the eight sentences three times using a Praat program, which is widely used in phonetic measurements. By measuring F1 and F2 in the vowel mid-point, we intended to find vowel formant patterns. 
 
 # **3. Restuls and Discussion**
 
