@@ -58,11 +58,20 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       fig.width = 6.5,
                       fig.height = 8)
-library(rio)
+
+install.packages("rio")
+install.packages("here")
+install.packages("vowels")
+install.packages("languageR")
+
+library(vowels)
 library(here)
+library(rio)
+library(languageR)
 library(tidyverse)
 library(janitor)
 library("papaja")
+
 
 theme_set(theme_minimal(base_size = 8))
 
