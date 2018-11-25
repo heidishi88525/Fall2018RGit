@@ -27,7 +27,8 @@ authornote: |
 
 abstract: |
 
-This paper investigates Korean vowel spaces of native Korean speakers (NS) and non-native Korean speakers (NNS, L1: English). The vowel production of NS and NNS were compared. All the speakers recorded eight Korean cardinal vowels, which are [i], [e], [æ], [ɯ], [ʌ], [o], [u], and [a] three times. A preceding consonant was lenis fricative [s] sound of Korean. The participants’ production was normalized by using Lobanov normalization function in the R program. Results show that NNS cannot differentiate the Korean mid-vowels and back vowels such as [ʌ], [o], and [u]. This research can be helpful to investigate that L1 English can affect the L2 Korean learners’ vowel pronunciation.   
+ This paper investigates Korean vowel spaces of native Korean speakers (NS) and non-native Korean speakers (NNS, L1: English). The vowel production of NS and NNS were compared. All the speakers recorded eight Korean cardinal vowels, which are [i], [e], [æ], [ɯ], [ʌ], [o], [u], and [a] three times. A preceding consonant was lenis fricative [s] sound of Korean. The participants’ production was normalized by using Lobanov normalization function in the R program. Results show that NNS cannot differentiate the Korean mid-vowels and back vowels such as [ʌ], [o], and [u]. This research can be helpful to investigate that L1 English can affect the L2 Korean learners’ vowel pronunciation.   
+ 
   <!-- https://tinyurl.com/ybremelq -->
   
 keywords          : "Community of Practice, Language Socialization"
@@ -58,11 +59,6 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       fig.width = 6.5,
                       fig.height = 8)
-
-install.packages("rio")
-install.packages("here")
-install.packages("vowels")
-install.packages("languageR")
 
 library(vowels)
 library(here)
