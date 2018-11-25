@@ -90,8 +90,6 @@ In this paper, our group investigated Korean vowel productions of Korean native 
 <<<<<<< HEAD
 To compare the convergence and divergence of L1 Korean and L2 Korean Vowel Production, we used a one-way between-subjects design, and analyzed the collected data using two Hz-basd measurements and a phonetic measurement tool, Praat. 
 =======
-We adopted the method introduced by @pan2011, the author of *Phonetics and phonology of Nantong Chinese*We used methods introduced by @ahmed2001. Besides we also adopted the diligent and collaborative approach to Rstudio (see @kadar2011).
-
 To compare the convergence and divergence of L1 Korean and L2 Korean Vowel Production, we used a one-way between-subjects design, and analyzed the collected data using a one-way ANOVA.
 >>>>>>> master
 
