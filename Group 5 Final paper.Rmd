@@ -99,7 +99,7 @@ Using convenince sampling, we sampled six adult residents living in Eugene, Oreg
 ## *2.2 Speech Materials*
 We prepared seven sentences consisting of eight Korean vowels; i,e,ae,w,^,a,u. The sentences to be tested will be added at the end of the orignial paper as one of the appendice. 
 
-## *2.3 Procedure
+## *2.3 Procedure*
 The Korean vowles of the participants were audie-recorded. We met in the quite room individally and we had them repeat the eight sentences three times using a Praat program, which is widely used in phonetic measurements. By measuring F1 and F2 in the vowel mid-point, we intended to find vowel formant patterns. 
 
 # **3. Restuls and Discussion**
