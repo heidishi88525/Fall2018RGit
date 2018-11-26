@@ -290,6 +290,30 @@ td %>%
   theme_bw()
 ```
 
+\newpage
+
+# **1.Introduction**
+In this paper, our group investigated Korean vowel productions of Korean native speakers (NS) and non-native Korean speakers (NNS) by analyzing acoustic features. We aimed to examine native speaker pattern of vowel formants in Korean, and to explore second language learners’ patterns in comparison to those of NNSs. Our results were analyzed by using normalization and statistic functions in the R program. The results indicate that L1 (English) of the NNSs might affect their L2 Korean vowel production. It is important to know what sounds students may have trouble with and what causes the difficulty in L2 Korean acquisition @Cho2003 @Heo1965. Thus, this study is useful in terms of as well as suggesting crucial research in the second language education field. 
+
+# **2. Methodology**
+
+To compare the convergence and divergence of L1 Korean and L2 Korean Vowel Production, we used a one-way between-subjects design, and analyzed the collected data using two Hz-basd measurements and a phonetic measurement tool, Praat. 
+
+## *2.1 Participants*
+Using convenince sampling, we sampled six adult residents living in Eugene, Oregon; three of them were Native Koreans, and the rest were non-Native sperking Koreans. Two Native Koreans were doctoral students majoring in East Asian Lanuages and Literatures, and the other one was a Korean instructor at the University of Oregon. Non-native speakers were recruited from one of the Korean classes at the Univeresity of Oregon. Korean participants were an average of 28 in age, while the average age of the non-Korean subjects were 19. 
+
+## *2.2 Speech Materials*
+We prepared seven sentences consisting of eight Korean vowels; i,e,ae,w,^,a,u. The sentences to be tested will be added at the end of the orignial paper as one of the appendice. 
+
+## *2.3 Procedure*
+The Korean vowles of the participants were audie-recorded. We met in the quite room individally and we had them repeat the eight sentences three times using a Praat program, which is widely used in phonetic measurements. By measuring F1 and F2 in the vowel mid-point, we intended to find vowel formant patterns. 
+
+# **3. Restuls and Discussion**
+In this section, vowel formant patterns of NSs and NNSs will be contrasted based on the obtained speech samples. First, we will report the mean ferments across three repetitions. Namely, the vowel charts all participants based on mean values will be presented and compared below. 
+The NS vowel charts reveal several convergences and divergences among the native speakers. For instance, NS1 tends to pronounce high-back vowel [u] as a front vowel. Meanwhile, her high-mid vowel [W] also approximates a high back vowel. Another sparkling native speaker is NS3, who is the only native subject who did not demonstrate a merge of [i], [e], and [æ], marked by her clear differentiation of [e] and [æ]. In general, NS 3 produced a similar pattern with the vowel chart of @Shin2012 regardless of some subtle variations. For instance, the mid-back vowel [o] in @Shin2012 is realized as a high-back vowel by NS3. NS3’s distinction in vowel articulation might be triggered by multiple reasons. Her standard Korean training experience for a teaching certificate in the Seoul Education office, as well as her relative shorter residence in English speaking countries, might be the causes.
+In the next section, we will present the vowel charts of NNS. Several shared typical L2 errors from the NNS data can be observed. First, compared to the NSs, none of the NNS participants successfully distinguished [A] and [o]. Although English vowels contrast [A] and [o], due to their shorter duration of learning Korean (five months), they may not have fully acquired the accurate L2 pronunciation. Moreover, except for NNS 2, the other two NNSs were both confused between [W] and [u]. Since NS 1 and NS 3 are their teachers in the Korean 102 class, they might have assimilated teachers’ inputs when producing the two sounds. In addition, given the apparent difference between [e] of “met” and [æ] of “mat” in English, they articulated [e] and [æ] as a merged vowel [e]. In other words, the merger consistently appeared in the NNS pronunciation because the teachers might not have fully explained the differences between [e] and [æ], or the students might not have perceived any dissimilarities between the teachers’ pronunciations. 
+Fortunately, there are noticeable native-like vowel patterns in the NNSs’ data as well. Especially their accurate production of [i] and [a]. They pronounce [i] as a high front vowel and [a] as a low mid vowel. Since there are similarities between Korean vowels and English vowels-- English [i] is also articulated in a high front position of the vocal tract-- they managed to produce Korean vowel [i] correctly. However, [a] has different acoustic features cross-language. For instance, English does not have [a] but an [a]. While the English [a] is a low back vowel, the Korean [a] is a low mid vowel. Thus, even though Korean [a] is different from English [a], L2 learners of Korean still can articulate Korean [a] accurately. It is interesting that they pronounce [a] more native-like than other vowels, despite dissimilarities, which is a dimension worth thorough investigation in the future analysis.
+
 ```{r SECTION2, echo=FALSE}
 #Section 2. (The following functions are for real research purposes) ####
 # To get summary stats by country and by vowel
@@ -341,62 +365,6 @@ add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", spe
 vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-3), title="Comparison of Two Speaker Groups", size=1.75)
 add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
 
-```
-
-\newpage
-
-# **1.Introduction**
-In this paper, our group investigated Korean vowel productions of Korean native speakers (NS) and non-native Korean speakers (NNS) by analyzing acoustic features. We aimed to examine native speaker pattern of vowel formants in Korean, and to explore second language learners’ patterns in comparison to those of NNSs. Our results were analyzed by using normalization and statistic functions in the R program. The results indicate that L1 (English) of the NNSs might affect their L2 Korean vowel production. It is important to know what sounds students may have trouble with and what causes the difficulty in L2 Korean acquisition @Cho2003 @Heo1965. Thus, this study is useful in terms of as well as suggesting crucial research in the second language education field. 
-
-# **2. Methodology**
-
-To compare the convergence and divergence of L1 Korean and L2 Korean Vowel Production, we used a one-way between-subjects design, and analyzed the collected data using two Hz-basd measurements and a phonetic measurement tool, Praat. 
-
-## *2.1 Participants*
-Using convenince sampling, we sampled six adult residents living in Eugene, Oregon; three of them were Native Koreans, and the rest were non-Native sperking Koreans. Two Native Koreans were doctoral students majoring in East Asian Lanuages and Literatures, and the other one was a Korean instructor at the University of Oregon. Non-native speakers were recruited from one of the Korean classes at the Univeresity of Oregon. Korean participants were an average of 28 in age, while the average age of the non-Korean subjects were 19. 
-
-## *2.2 Speech Materials*
-We prepared seven sentences consisting of eight Korean vowels; i,e,ae,w,^,a,u. The sentences to be tested will be added at the end of the orignial paper as one of the appendice. 
-
-## *2.3 Procedure*
-The Korean vowles of the participants were audie-recorded. We met in the quite room individally and we had them repeat the eight sentences three times using a Praat program, which is widely used in phonetic measurements. By measuring F1 and F2 in the vowel mid-point, we intended to find vowel formant patterns. 
-
-# **3. Restuls and Discussion**
-In this section, vowel formant patterns of NSs and NNSs will be contrasted based on the obtained speech samples. First, we will report the mean ferments across three repetitions. Namely, the vowel charts all participants based on mean values will be presented and compared below. 
-The NS vowel charts reveal several convergences and divergences among the native speakers. For instance, NS1 tends to pronounce high-back vowel [u] as a front vowel. Meanwhile, her high-mid vowel [W] also approximates a high back vowel. Another sparkling native speaker is NS3, who is the only native subject who did not demonstrate a merge of [i], [e], and [æ], marked by her clear differentiation of [e] and [æ]. In general, NS 3 produced a similar pattern with the vowel chart of @Shin2012 regardless of some subtle variations. For instance, the mid-back vowel [o] in @Shin2012 is realized as a high-back vowel by NS3. NS3’s distinction in vowel articulation might be triggered by multiple reasons. Her standard Korean training experience for a teaching certificate in the Seoul Education office, as well as her relative shorter residence in English speaking countries, might be the causes.
-In the next section, we will present the vowel charts of NNS. Several shared typical L2 errors from the NNS data can be observed. First, compared to the NSs, none of the NNS participants successfully distinguished [A] and [o]. Although English vowels contrast [A] and [o], due to their shorter duration of learning Korean (five months), they may not have fully acquired the accurate L2 pronunciation. Moreover, except for NNS 2, the other two NNSs were both confused between [W] and [u]. Since NS 1 and NS 3 are their teachers in the Korean 102 class, they might have assimilated teachers’ inputs when producing the two sounds. In addition, given the apparent difference between [e] of “met” and [æ] of “mat” in English, they articulated [e] and [æ] as a merged vowel [e]. In other words, the merger consistently appeared in the NNS pronunciation because the teachers might not have fully explained the differences between [e] and [æ], or the students might not have perceived any dissimilarities between the teachers’ pronunciations. 
-Fortunately, there are noticeable native-like vowel patterns in the NNSs’ data as well. Especially their accurate production of [i] and [a]. They pronounce [i] as a high front vowel and [a] as a low mid vowel. Since there are similarities between Korean vowels and English vowels-- English [i] is also articulated in a high front position of the vocal tract-- they managed to produce Korean vowel [i] correctly. However, [a] has different acoustic features cross-language. For instance, English does not have [a] but an [a]. While the English [a] is a low back vowel, the Korean [a] is a low mid vowel. Thus, even though Korean [a] is different from English [a], L2 learners of Korean still can articulate Korean [a] accurately. It is interesting that they pronounce [a] more native-like than other vowels, despite dissimilarities, which is a dimension worth thorough investigation in the future analysis.
-```{r Vowel Charts of All Speakers, Echo=FALSE}
-#Each native's production, grouped by country####
-vowelplot(lc.vowels, color="vowels", speaker="Native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), title="Native Korean Speakers", size=.75)
-
-add.spread.vowelplot(lc.vowels[,1:7], speaker="Native Korean", sd.mult=1, ellipsis=T, color="vowels")
-
-#Each non-native's production, grouped by country####
-vowelplot(lc.vowels, color="vowels", speaker="Non native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, title="Non-Native Korean Speakers", size=.75)
-
-add.spread.vowelplot(lc.vowels[,1:7], speaker="Non native Korean", sd.mult=1, ellipsis=T, color="vowels")
-```
-
-```{r Vowel Chart of Mean Values, Echo=FALSE}
-# Plotting just the mean values, grouped by country
-
-# Another way to summarize the data
-nk.means <- compute.means(lc.vowels[,1:7], speaker="Native Korean")
-nnk.means <- compute.means(lc.vowels[,1:7], speaker="Non native Korean")
-both.means <- rbind(nk.means, nnk.means)
-
-#NS Mean Value Vowel Chart
-vowelplot(nk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Native Korean speakers", leg=NA, size=1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Native Korean")
-
-#NNS Mean Value Vowel Chart
-vowelplot(nnk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Non-Native Korean Speakers", leg=NA, size=1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Non native Korean")
-
-#Comparative Mean Value Vowel Chart of both countries
-vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-3), title="Comparison of Two Speaker Groups", size=1.75)
-add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
 ```
 
 # **4. Conclusion**
