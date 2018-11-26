@@ -63,6 +63,8 @@ library(vowels)
 library(here)
 library(rio)
 library(languageR)
+library(hexView)
+library(dplyr)
 
 library(knitr)
 library(tidyverse)

@@ -1,4 +1,5 @@
 install.packages("rio")
+install.packages("hexView")
 install.packages("here")
 install.packages("vowels")
 install.packages("languageR")
@@ -6,6 +7,7 @@ install.packages("languageR")
 library(vowels)
 library(here)
 library(rio)
+library(hexView)
 library(languageR)
 
 
