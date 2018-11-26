@@ -48,10 +48,8 @@ documentclass     : "apa6"
 classoption       : "man, fleqn, noextraspace"
 output            : 
                    papaja::apa6_pdf:
-                     toc: true
-                     toc_depth: 4
-                     latex_engine: xelatex
-                    
+                    toc: true
+                    toc_depth: 4
 ---
 
 ```{r setup, include = FALSE}

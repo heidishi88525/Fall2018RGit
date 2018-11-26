@@ -1,5 +1,7 @@
 \begin{figure*}[hbt]
 \ifnextchar[{\eatarg}{}
 
-\includegraphics[width=1\linewidth]{1 NS mean F1} \caption{An example image.}\label{fig:foo}
+\centering
+\includegraphics{https://raw.githubusercontent.com/heidishi88525/Fall2018RGit/master/Final\%20Project\%2014\%20Plots/10\%20NS\%20Vowel\%20Chart.png?raw=true}
+\caption{1}
 \end{figure*}
