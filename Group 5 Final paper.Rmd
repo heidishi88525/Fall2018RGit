@@ -76,10 +76,276 @@ theme_set(theme_minimal(base_size = 8))
 
 ```
 
+```{r,PREP for Vowel Charts, echo=F}
+library(dplyr)
+library(readxl)
+nk <- read_excel("data/NK.xls")
+nnk <- read_excel("data/NNK.xls")
+vowels <- rbind(nk, nnk)
+vowels <- as.data.frame(vowels)
+library(languageR)
+l.vowels <- norm.lobanov(vowels)
+
+#[Formatting1]
+#The following codes are based on a template to create Vowel charts, they may seem redundant, but... sorry, we need this template
+
+# The asterisks in the headings are weird -- rename the F*1 & F*2 columns
+l.vowels$F1 <- l.vowels[,4]
+l.vowels$F2 <- l.vowels[,5]
+
+# Change Speaker and Vowel into factors
+l.vowels$Speaker <- as.factor(l.vowels$Speaker)
+l.vowels$Vowel <- as.factor(l.vowels$Vowel)
+
+# Now, make a column denoting which country the speaker is from
+l.vowels$Country <- NA
+
+# Same as above for country
+l.vowels$Country[l.vowels$Speaker %in% c("NS1", "NS2", "NS3")] <- "Native Korean"
+l.vowels$Country[l.vowels$Speaker %in% c("NNS1", "NNS2", "NNS3")] <- "Non native Korean"
+l.vowels$Country <- as.factor(l.vowels$Country)
+```
+
+```{r SECTION1-A, echo=FALSE, eval=FALSE}
+####Section 1. The following functions are generated to meet the requirement of EDLD 610 final peoject####
+
+#l.vowels is the main dataframe we will work on, we rename it into df
+library(tidyverse)
+
+df<-l.vowels  #IMPORTANT STEP
+
+# Tidyverse df, removed NA & useless columns, call the new one td
+td<- df[-3:-7]  #IMPORTANT STEP
+
+####gather####
+gtd<-td %>% 
+  gather(Forments,Value,-c(1:2,5))
+
+####separate####
+setd<-gtd %>% 
+  separate(Speaker, c("nativity", "number"), -1)
+
+####spread####
+nsptd<-gtd %>% 
+  tbl_df() %>% 
+  group_by(Vowel,Forments) %>% 
+  filter(Country=="Native Korean") %>% 
+  summarize(mean = mean(Value, na.rm = TRUE)) %>% 
+  spread(Vowel, mean)  #Native Speakers' mean F1&F2 for each vowel
+
+nnsptd<-gtd %>% 
+  tbl_df() %>% 
+  group_by(Vowel, Forments) %>% 
+  filter(Country=="Non native Korean") %>% 
+  summarize(mean = mean(Value, na.rm = TRUE)) %>% 
+  spread(Vowel, mean) #Non-native Speakers' mean F1&F2 for each vowel
+```
+
+```{r SECTION1-B, echo=FALSE, eval=FALSE}
+####select+ group_by+ summarize####
+##check mean vowel height (F1) by each Vowel
+
+#Native speakers
+n_F1vmean<-td %>% 
+  filter(Country=="Native Korean") %>% 
+  select(Speaker,Vowel,F1) %>% 
+  group_by(Vowel) %>% 
+  summarize(n_vmeanF1=mean(F1)) #Native Speakers' mean F1 for each vowel
+
+####[Plot 1] NS mean F1 of each vowel####
+ggplot(n_F1vmean, aes(x=Vowel,y = n_vmeanF1))+
+  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("Native Speakers' Mean F1 of Each Vowel") +
+  theme_bw()
+
+#Non-Native speakers
+nn_F1vmean<-td %>% 
+  filter(Country=="Non native Korean") %>% 
+  select(Speaker,Vowel,F1) %>% 
+  group_by(Vowel) %>% 
+  summarize(nn_vmeanF1=mean(F1)) #Non-Native Speakers' mean F1 for each vowel
+
+####[Plot 2] NNS mean F1 of each vowel####
+ggplot(nn_F1vmean, aes(x=Vowel,y = nn_vmeanF1))+
+  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("Non-Native Speakers' Mean F1 of Each Vowel") +
+  theme_bw()
+
+##check mean vowel backenss (F2) by each Vowel
+#Native Speakers
+n_F2vmean<-td %>% 
+  filter(Country=="Native Korean") %>% 
+  select(Speaker,Vowel,F2) %>% 
+  group_by(Vowel) %>% 
+  summarize(n_vmeanF2=mean(F2)) #Native Speakers' mean F2 for each vowel
+
+####[Plot 3] NS mean F2 of each vowel ####
+ggplot(n_F2vmean, aes(x=Vowel,y = n_vmeanF2))+
+  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+  xlab("Vowel") + ylab("F2") +
+  ggtitle("Native Speakers' Mean F2 of Each Vowel") +
+  theme_bw() 
+
+#Non-Native Speakers
+nn_F2vmean<-td %>% 
+  filter(Country=="Non native Korean") %>% 
+  select(Speaker,Vowel,F2) %>% 
+  group_by(Vowel) %>% 
+  summarize(nn_vmeanF2=mean(F2)) #Non-Native Speakers' mean F2 for each vowel
+
+####[Plot 4] NNS mean F2 of each vowel ####
+ggplot(nn_F2vmean, aes(x=Vowel,y = nn_vmeanF2))+
+  geom_bar(stat = "identity", aes(fill = Vowel), position = "dodge") +
+  xlab("Vowel") + ylab("F2") +
+  ggtitle("Non-Native Speakers' Mean F2 of Each Vowel") +
+  theme_bw()
+
+####filter+ group_by+ summarize####
+#Now we switch to Mean and SD
+
+#Native F1
+F1n<-td %>%
+  filter (Country=="Native Korean") %>% 
+  group_by(Vowel) %>% 
+  summarize(nmean_F1 = mean(F1),
+            nsd_F1 = sd(F1))
+
+F1n ##native's mean F1 & sd of all vowels
+
+####[Plot5] Boxplot of NS F1 mean and sd ####
+td %>% 
+  filter (Country=="Native Korean") %>% 
+  group_by(Vowel) %>% 
+  ggplot(aes(x = Vowel, y = F1)) +
+  geom_line(aes(group = Vowel)) +
+  geom_point()+
+  geom_boxplot()+
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("F1 of Native Speakers") +
+  theme_bw()
+
+#Non-Native F1
+F1nn<-td %>%
+  filter (Country=="Non native Korean") %>% 
+  group_by(Vowel) %>% 
+  summarize(nnmean_F1 = mean(F1),
+            nnsd_F1 = sd(F1))
+
+F1nn #non-native's mean F1 & sd of all vowels
+
+####[Plot6] Boxplot of NNS F1 mean and sd ####
+td %>% 
+  filter (Country=="Non native Korean") %>% 
+  group_by(Vowel) %>% 
+  ggplot(aes(x = Vowel, y = F1)) +
+  geom_line(aes(group = Vowel)) +
+  geom_point()+
+  geom_boxplot()+
+  xlab("Vowel") + ylab("F1") +
+  ggtitle("F1 of Non-Native Speakers") +
+  theme_bw()
+
+#Native F2
+F2n<-td %>%
+  filter (Country=="Native Korean") %>% 
+  group_by(Vowel) %>% 
+  summarize(nmean_F2 = mean(F2),
+            nsd_F1 = sd(F2))
+
+F2n ##native's mean F1 & sd of all vowels
+
+####[Plot7] Boxplot of NS F2 mean and sd ####
+td %>% 
+  filter (Country=="Native Korean") %>% 
+  group_by(Vowel) %>% 
+  ggplot(aes(x = Vowel, y = F1)) +
+  geom_line(aes(group = Vowel)) +
+  geom_point()+
+  geom_boxplot()+
+  xlab("Vowel") + ylab("F2") +
+  ggtitle("F2 of Native Speakers") +
+  theme_bw()
+
+#Non-Native F2
+F2nn<-td %>%
+  filter (Country=="Non native Korean") %>% 
+  group_by(Vowel) %>% 
+  summarize(nnmean_F2 = mean(F2),
+            nnsd_F2 = sd(F2))
+
+F2nn #non-native's mean F2 & sd of all vowels
+
+####[Plot8] Boxplot of NNS Fs mean and sd ####
+td %>% 
+  filter (Country=="Non native Korean") %>% 
+  group_by(Vowel) %>% 
+  ggplot(aes(x = Vowel, y = F2)) +
+  geom_line(aes(group = Vowel)) +
+  geom_point()+
+  geom_boxplot()+
+  xlab("Vowel") + ylab("F2") +
+  ggtitle("F2 of Non-Native Speakers") +
+  theme_bw()
+```
+
+```{r SECTION2, echo=FALSE}
+#Section 2. (The following functions are for real research purposes) ####
+# To get summary stats by country and by vowel
+
+summary.c.vowels <- ddply(l.vowels, .(Country, Vowel), summarise, N = length(F1), MeanF1 = mean(F1), SDF1 = sd(F1), SEF1 = sd(F1)/sqrt(length(F1)), MeanF2 = abs(mean(F2)), SDF2 = sd(F2), SEF2 = sd(F2)/sqrt(length(F2)))
+
+####Vowel Charts####
+
+####[Plot 9]Plotting everything at once to look at outliers####
+vowelplot(l.vowels, color="vowels", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, size=.75)
+
+# Lots of outliers, so should probably trim
+
+####[Formatting 2]
+# In order to plot by group, need to convince the program that "country" is really "speaker"
+# Make lg.vowels, and put "group2" in the "Speaker" (first) column
+
+lc.vowels <- l.vowels
+lc.vowels$SpeakerNum <- lc.vowels[,1] #adding a speakerNum column at the end
+lc.vowels[,1] <- lc.vowels$Country #changing the "Speaker" column to "Country"
+
+####[Plot 10] Each native's production, grouped by country####
+vowelplot(lc.vowels, color="vowels", speaker="Native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), title="Native Korean Speakers", size=.75)
+
+add.spread.vowelplot(lc.vowels[,1:7], speaker="Native Korean", sd.mult=1, ellipsis=T, color="vowels")
+
+####[Plot 11] Each non-native's production, grouped by country####
+vowelplot(lc.vowels, color="vowels", speaker="Non native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, title="Non-Native Korean Speakers", size=.75)
+
+add.spread.vowelplot(lc.vowels[,1:7], speaker="Non native Korean", sd.mult=1, ellipsis=T, color="vowels")
+
+
+# Plotting just the mean values, grouped by country
+
+# Another way to summarize the data
+nk.means <- compute.means(lc.vowels[,1:7], speaker="Native Korean")
+nnk.means <- compute.means(lc.vowels[,1:7], speaker="Non native Korean")
+both.means <- rbind(nk.means, nnk.means)
+
+####[Plot 12] NS Mean Value Vowel Chart####
+vowelplot(nk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Native Korean speakers", leg=NA, size=1.75)
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Native Korean")
+
+####[Plot 13] NNS Mean Value Vowel Chart####
+vowelplot(nnk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Non-Native Korean Speakers", leg=NA, size=1.75)
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Non native Korean")
+
+####[Plot 14] Comparative Mean Value Vowel Chart of both countries####
+vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-3), title="Comparison of Two Speaker Groups", size=1.75)
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
+
+```
+
 \newpage
 
 # **1.Introduction**
-
 In this paper, our group investigated Korean vowel productions of Korean native speakers (NS) and non-native Korean speakers (NNS) by analyzing acoustic features. We aimed to examine native speaker pattern of vowel formants in Korean, and to explore second language learners’ patterns in comparison to those of NNSs. Our results were analyzed by using normalization and statistic functions in the R program. The results indicate that L1 (English) of the NNSs might affect their L2 Korean vowel production. It is important to know what sounds students may have trouble with and what causes the difficulty in L2 Korean acquisition @Cho2003 @Heo1965. Thus, this study is useful in terms of as well as suggesting crucial research in the second language education field. 
 
 # **2. Methodology**
@@ -100,10 +366,48 @@ In this section, vowel formant patterns of NSs and NNSs will be contrasted based
 The NS vowel charts reveal several convergences and divergences among the native speakers. For instance, NS1 tends to pronounce high-back vowel [u] as a front vowel. Meanwhile, her high-mid vowel [W] also approximates a high back vowel. Another sparkling native speaker is NS3, who is the only native subject who did not demonstrate a merge of [i], [e], and [æ], marked by her clear differentiation of [e] and [æ]. In general, NS 3 produced a similar pattern with the vowel chart of @Shin2012 regardless of some subtle variations. For instance, the mid-back vowel [o] in @Shin2012 is realized as a high-back vowel by NS3. NS3’s distinction in vowel articulation might be triggered by multiple reasons. Her standard Korean training experience for a teaching certificate in the Seoul Education office, as well as her relative shorter residence in English speaking countries, might be the causes.
 In the next section, we will present the vowel charts of NNS. Several shared typical L2 errors from the NNS data can be observed. First, compared to the NSs, none of the NNS participants successfully distinguished [A] and [o]. Although English vowels contrast [A] and [o], due to their shorter duration of learning Korean (five months), they may not have fully acquired the accurate L2 pronunciation. Moreover, except for NNS 2, the other two NNSs were both confused between [W] and [u]. Since NS 1 and NS 3 are their teachers in the Korean 102 class, they might have assimilated teachers’ inputs when producing the two sounds. In addition, given the apparent difference between [e] of “met” and [æ] of “mat” in English, they articulated [e] and [æ] as a merged vowel [e]. In other words, the merger consistently appeared in the NNS pronunciation because the teachers might not have fully explained the differences between [e] and [æ], or the students might not have perceived any dissimilarities between the teachers’ pronunciations. 
 Fortunately, there are noticeable native-like vowel patterns in the NNSs’ data as well. Especially their accurate production of [i] and [a]. They pronounce [i] as a high front vowel and [a] as a low mid vowel. Since there are similarities between Korean vowels and English vowels-- English [i] is also articulated in a high front position of the vocal tract-- they managed to produce Korean vowel [i] correctly. However, [a] has different acoustic features cross-language. For instance, English does not have [a] but an [a]. While the English [a] is a low back vowel, the Korean [a] is a low mid vowel. Thus, even though Korean [a] is different from English [a], L2 learners of Korean still can articulate Korean [a] accurately. It is interesting that they pronounce [a] more native-like than other vowels, despite dissimilarities, which is a dimension worth thorough investigation in the future analysis.
+```{r Vowel Charts of All Speakers, Echo=FALSE}
+#Each native's production, grouped by country####
+vowelplot(lc.vowels, color="vowels", speaker="Native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), title="Native Korean Speakers", size=.75)
+
+add.spread.vowelplot(lc.vowels[,1:7], speaker="Native Korean", sd.mult=1, ellipsis=T, color="vowels")
+
+#Each non-native's production, grouped by country####
+vowelplot(lc.vowels, color="vowels", speaker="Non native Korean", label="vowels", xlim=c(4.5,-4.5), ylim=c(4.5,-4.5), leg=NA, title="Non-Native Korean Speakers", size=.75)
+
+add.spread.vowelplot(lc.vowels[,1:7], speaker="Non native Korean", sd.mult=1, ellipsis=T, color="vowels")
+```
+
+```{r Vowel Chart of Mean Values, Echo=FALSE}
+# Plotting just the mean values, grouped by country
+
+# Another way to summarize the data
+nk.means <- compute.means(lc.vowels[,1:7], speaker="Native Korean")
+nnk.means <- compute.means(lc.vowels[,1:7], speaker="Non native Korean")
+both.means <- rbind(nk.means, nnk.means)
+
+#NS Mean Value Vowel Chart
+vowelplot(nk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Native Korean speakers", leg=NA, size=1.75)
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Native Korean")
+
+#NNS Mean Value Vowel Chart
+vowelplot(nnk.means, color="vowels", label="vowels", xlim=c(3, -3), ylim=c(3, -3), title="Non-Native Korean Speakers", leg=NA, size=1.75)
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="vowels", speaker="Non native Korean")
+
+#Comparative Mean Value Vowel Chart of both countries
+vowelplot(both.means, color="speakers", label="vowels", xlim=c(3,-3), ylim=c(3,-3), title="Comparison of Two Speaker Groups", size=1.75)
+add.spread.vowelplot(lc.vowels[,1:7], sd.mult=1, ellipsis=T, color="speakers")
+```
 
 # **4. Conclusion**
 In summary, our analysis indicates that even native Korean speakers may have different vowel formant patterns due to their various duration of living in foreign countries and native language phonetic training. Additionally, teachers’ classroom input may play an essential role in L2 sound acquisition. For instance, the NNS in this study demonstrated a confusion between vowel [W] and [u]. Furthermore, despite the dissimilarities between the participants’ L1 and L2, the learners still can have relatively more native-like articulations of [a]. We speculate that the teacher’s demo pronunciation and explicit instruction are critical for this achievement. In the meantime, the vowels [e] and [æ] extracted from the current data are controversial. Since the merger of [e] and [æ] is progressing in Standard Seoul Korean, how to teach the articulations of these two sounds needs to be discussed in the future.
 \newpage
+
+# **5. Apendix**
+```{r echo=FALSE}
+nk %>% knitr::kable(format= "latex")
+nnk %>% knitr::kable(format= "latex")
+```
 
 # **References**
 ```{r create_r-references}
