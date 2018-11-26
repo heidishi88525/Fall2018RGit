@@ -1,0 +1,5 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+
+\includegraphics[width=1\linewidth]{1 NS mean F1} \caption{An example image.}\label{fig:foo}
+\end{figure*}

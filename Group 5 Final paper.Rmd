@@ -65,21 +65,16 @@ library(vowels)
 library(here)
 library(rio)
 library(languageR)
+
+library(knitr)
 library(tidyverse)
 library(janitor)
 library("papaja")
-
+library(plyr)
 
 theme_set(theme_minimal(base_size = 8))
 
 ```
-
-```{r analysis-preferences}
-# Seed for random number generation
-set.seed(42)
-knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
-```
-
 
 \newpage
 
